@@ -7,6 +7,7 @@ import Loading from './Loading';
 import JikanAPI from '../api/jikanApi';
 import { BaseStore } from '../store/store';
 import GenericButton from './GenericButton';
+import Search from './Search';
 
 const jikanClient = new JikanAPI();
 
@@ -20,6 +21,7 @@ const Dashboard = () => {
 
     const toastRef = useRef();
     const isFetchingAnimeList = useRef(false);
+
     const [isLoading, setIsLoading] = useState(false);
 
     useEffect(() => {
@@ -44,7 +46,7 @@ const Dashboard = () => {
         };
 
         fetchAnime();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, [page]);
 
     useEffect(() => {
@@ -61,14 +63,15 @@ const Dashboard = () => {
         }
 
         fetchGenres();
-    // eslint-disable-next-line react-hooks/exhaustive-deps
+        // eslint-disable-next-line react-hooks/exhaustive-deps
     }, []);
 
     return (
         <div id="main-body">
+            <Search />
             <AnimeList animeList={animeList} />
             {isLoading && <Loading />}
-            {!isLoading && <GenericButton onClick={() => setPage(page + 1)} />}
+            {!isLoading && <GenericButton onClick={() => setPage(page + 1)} text={"Load More"} />}
             <Toast ref={toastRef} />
         </div>
     );

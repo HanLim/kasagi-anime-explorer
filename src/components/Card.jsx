@@ -23,8 +23,9 @@ const Card = ({ anime }) => {
                 <p className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                     {anime.title}
                 </p>
+                <hr className="w-full" />
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
-                    {anime.status}
+                    {anime.score}
                 </p>
             </div>
         </a>

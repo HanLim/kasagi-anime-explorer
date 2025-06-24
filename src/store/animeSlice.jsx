@@ -5,4 +5,5 @@ export const createAnimeSlice = (set) => ({
     setList: (list) => set((state) => ({ list: [...state.list, ...list] })),
     setPage: (page) => set({ page }),
     setGenre: (genre) => set({ genre }),
+    reset: () => set({ list: [], page: 1 }),
 });
