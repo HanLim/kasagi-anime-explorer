@@ -1,8 +1,6 @@
 import { useEffect, useRef, useState } from 'react';
 
 import Toast from './Toast';
-import Footer from './Footer';
-import Header from './Header';
 import AnimeList from './AnimeList';
 import Loading from './Loading';
 
@@ -67,14 +65,12 @@ const Dashboard = () => {
     }, []);
 
     return (
-        <>
-            <Header />
+        <div id="main-body">
             <AnimeList animeList={animeList} />
             {isLoading && <Loading />}
             {!isLoading && <GenericButton onClick={() => setPage(page + 1)} />}
             <Toast ref={toastRef} />
-            <Footer />
-        </>
+        </div>
     );
 };
 

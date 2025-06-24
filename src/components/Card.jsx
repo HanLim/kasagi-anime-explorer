@@ -1,12 +1,19 @@
 import PropTypes from "prop-types";
 
-const cardClass = `flex flex-col md:flex-row rounded-lg border border-gray-200 bg-white shadow-sm
-    hover:shadow-xl hover:scale-105 hover:bg-gray-100 transition duration-300
-    md:max-w-xl dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:shadow-xl`;
+const cardClass = `
+    flex flex-col md:flex-row
+    rounded-lg
+    bg-gray-600
+    shadow-sm hover:shadow-xl
+    hover:scale-105
+    hover:bg-gray-500
+    transition duration-300
+    md:max-w-xl`;
 
 const Card = ({ anime }) => {
+    const url = "/anime/" + anime.mal_id;
     return (
-        <a href="#" className={cardClass}>
+        <a href={url} className={cardClass}>
             <img
                 className="w-full h-96 rounded-t-lg object-cover md:h-full md:w-48 md:rounded-none md:rounded-s-lg"
                 src={anime.images.jpg.image_url}
@@ -25,15 +32,7 @@ const Card = ({ anime }) => {
 };
 
 Card.propTypes = {
-    anime: PropTypes.shape({
-        images: PropTypes.shape({
-            jpg: PropTypes.shape({
-                image_url: PropTypes.string.isRequired,
-            }).isRequired,
-        }).isRequired,
-        title: PropTypes.string.isRequired,
-        status: PropTypes.string,
-    }).isRequired,
+    anime: PropTypes.any.isRequired,
 };
 
 export default Card;
