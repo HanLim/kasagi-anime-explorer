@@ -1,20 +1,21 @@
 import PropTypes from "prop-types";
 
+const cardClass = `flex flex-col md:flex-row rounded-lg border border-gray-200 bg-white shadow-sm
+    hover:shadow-xl hover:scale-105 hover:bg-gray-100 transition duration-300
+    md:max-w-xl dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700 dark:hover:shadow-xl`;
+
 const Card = ({ anime }) => {
     return (
-        <a
-            href="#"
-            className="flex flex-col items-center rounded-lg border border-gray-200 bg-white shadow-sm hover:bg-gray-100 md:max-w-xl md:flex-row dark:border-gray-700 dark:bg-gray-800 dark:hover:bg-gray-700"
-        >
+        <a href="#" className={cardClass}>
             <img
-                className="h-96 w-full rounded-t-lg object-cover md:h-auto md:w-48 md:rounded-none md:rounded-s-lg"
+                className="w-full h-96 rounded-t-lg object-cover md:h-full md:w-48 md:rounded-none md:rounded-s-lg"
                 src={anime.images.jpg.image_url}
                 alt={anime.title}
             />
-            <div className="flex flex-col justify-between p-4 leading-normal">
-                <h5 className="mb-2 text-2xl font-bold tracking-tight text-gray-900 dark:text-white">
+            <div className="flex flex-col w-full items-center text-center justify-evenly p-4 leading-normal md:h-full">
+                <p className="mb-2 text-xl font-bold tracking-tight text-gray-900 dark:text-white">
                     {anime.title}
-                </h5>
+                </p>
                 <p className="mb-3 font-normal text-gray-700 dark:text-gray-400">
                     {anime.status}
                 </p>

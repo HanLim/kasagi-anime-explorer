@@ -24,7 +24,6 @@ const Dashboard = () => {
     const isFetchingAnimeList = useRef(false);
     const [isLoading, setIsLoading] = useState(false);
 
-
     useEffect(() => {
         const fetchAnime = async () => {
             if (isFetchingAnimeList.current) return;
