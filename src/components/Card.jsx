@@ -1,6 +1,6 @@
-import PropTypes from 'prop-types';
+import PropTypes from "prop-types";
 
-function Card({ anime }) {
+const Card = ({ anime }) => {
     return (
         <a
             href="#"
@@ -21,7 +21,7 @@ function Card({ anime }) {
             </div>
         </a>
     );
-}
+};
 
 Card.propTypes = {
     anime: PropTypes.shape({
