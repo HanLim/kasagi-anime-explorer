@@ -4,12 +4,12 @@ import Toast from './Toast';
 import AnimeList from './AnimeList';
 import Loading from './Loading';
 
-import JikanAPI from '../api/jikanApi';
+import jikanClient from '../api/jikanApi';
 import { BaseStore } from '../store/store';
 import GenericButton from './GenericButton';
 import Search from './Search';
+import { DEFAULT } from '../store/animeSlice';
 
-const jikanClient = new JikanAPI();
 
 const Dashboard = () => {
     const page = BaseStore((state) => state.page);
@@ -18,36 +18,43 @@ const Dashboard = () => {
     const setAnimeList = BaseStore((state) => state.setList);
     const setGenre = BaseStore((state) => state.setGenre);
     const genre = BaseStore((state) => state.genre);
+    const listMode = BaseStore((state) => state.listMode);
 
     const toastRef = useRef();
     const isFetchingAnimeList = useRef(false);
 
     const [isLoading, setIsLoading] = useState(false);
 
+    const fetchDefaultAnimeList = () => {
+        setIsLoading(true);
+        jikanClient
+            .getAnimeList({ page })
+            .then((response) => {
+                setAnimeList(response.data);
+            })
+            .catch((error) => {
+                toastRef.current.show("Error loading anime list! " + error.message);
+            })
+            .finally(() => {
+                setIsLoading(false);
+                isFetchingAnimeList.current = false;
+            });
+    };
+
+
+
     useEffect(() => {
-        const fetchAnime = async () => {
-            if (isFetchingAnimeList.current) return;
+        // to prevent double fetching in dev
+        if (isFetchingAnimeList.current) return;
+
+        // fetch list in default mode
+        if (listMode === DEFAULT) {
             isFetchingAnimeList.current = true;
+            fetchDefaultAnimeList();
+        }
 
-            setIsLoading(true);
-
-            jikanClient
-                .getAnimeList(page)
-                .then((response) => {
-                    setAnimeList(response.data);
-                })
-                .catch((error) => {
-                    toastRef.current.show("Error loading anime list! " + error.message);
-                })
-                .finally(() => {
-                    setIsLoading(false);
-                    isFetchingAnimeList.current = false;
-                });
-        };
-
-        fetchAnime();
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page]);
+    }, [page, listMode]);
 
     useEffect(() => {
         const fetchGenres = async () => {
@@ -68,7 +75,7 @@ const Dashboard = () => {
 
     return (
         <div id="main-body">
-            <Search />
+            <Search toastRef={toastRef} setIsLoading={setIsLoading} />
             <AnimeList animeList={animeList} />
             {isLoading && <Loading />}
             {!isLoading && <GenericButton onClick={() => setPage(page + 1)} text={"Load More"} />}

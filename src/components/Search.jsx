@@ -1,16 +1,26 @@
 import { useState, useEffect, useRef } from 'react';
+import PropTypes from 'prop-types';
 import { BaseStore } from '../store/store';
 
 import GenericButton from './GenericButton';
+import { DEFAULT, SEARCHED } from '../store/animeSlice';
 
-const Search = () => {
+import jikanClient from '../api/jikanApi';
+
+const Search = ({ toastRef, setIsLoading }) => {
+    const page = BaseStore((state) => state.page);
     const genre = BaseStore((state) => state.genre);
     const reset = BaseStore((state) => state.reset);
+    const listMode = BaseStore((state) => state.listMode);
+    const setAnimeList = BaseStore((state) => state.setList);
+    const setListMode = BaseStore((state) => state.setListMode);
+    const searchText = BaseStore((state) => state.searchText);
+    const setSearchText = BaseStore((state) => state.setSearchText);
 
-    const [searchText, setSearchText] = useState("");
+    const searchGenre = BaseStore((state) => state.searchGenre);
+
     const [showDropdown, setShowDropdown] = useState(false);
     const [filters, setFilters] = useState(null);
-    const [searched, setSearched] = useState(false);
 
     const dropdownRef = useRef();
 
@@ -19,18 +29,39 @@ const Search = () => {
     };
 
     const searchAnime = () => {
-        setSearched(true);
-        // call the search api here
+        const query = searchText.trim();
+        const genres = searchGenre;
+        if (!query && !genres) return;
+
+        setAnimeList([]);
+        setListMode(SEARCHED);
+        fetchSearchedAnimeList({ query, genres });
     }
 
     const resetSearch = () => {
         setSearchText("");
         setFilters(null);
 
-        if (searched) {
-            setSearched(false);
+        if (listMode === SEARCHED) {
             reset();
+            setListMode(DEFAULT);
         }
+    };
+
+    const fetchSearchedAnimeList = ({ query, genres }) => {
+        setIsLoading(true);
+
+        jikanClient
+            .searchAnime({ page, query, genres })
+            .then((response) => {
+                setAnimeList(response.data);
+            })
+            .catch((error) => {
+                toastRef.current.show("Error loading anime list! " + error.message);
+            })
+            .finally(() => {
+                setIsLoading(false);
+            });
     };
 
     const genreList = genre.map((item) =>
@@ -84,6 +115,10 @@ const Search = () => {
             </div>
         </div>
     );
+};
+Search.propTypes = {
+    toastRef: PropTypes.shape({ current: PropTypes.any }),
+    setIsLoading: PropTypes.func.isRequired,
 };
 
 export default Search;
