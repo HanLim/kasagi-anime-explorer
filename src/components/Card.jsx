@@ -13,9 +13,9 @@ const cardClass = `
 
 
 const generateIcon = (score) => {
-    if (score >= 8) {
+    if (score >= 7) {
         return <GoodScoreIcon />;
-    } else if (score >= 60) {
+    } else if (score >= 5) {
         return <NormalScoreIcon />;
     } else {
         return <BadScoreIcon />;
