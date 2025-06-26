@@ -19,11 +19,14 @@ const Dashboard = () => {
     const setGenre = BaseStore((state) => state.setGenre);
     const genre = BaseStore((state) => state.genre);
     const listMode = BaseStore((state) => state.listMode);
+    const searchText = BaseStore((state) => state.searchText);
+    const searchGenre = BaseStore((state) => state.searchGenre);
 
     const toastRef = useRef();
     const isFetchingAnimeList = useRef(false);
 
     const [isLoading, setIsLoading] = useState(false);
+    const [hasNextPage, setHasNextPage] = useState(true);
 
     const fetchDefaultAnimeList = () => {
         setIsLoading(true);
@@ -31,6 +34,7 @@ const Dashboard = () => {
             .getAnimeList({ page })
             .then((response) => {
                 setAnimeList(response.data);
+                setHasNextPage(response.pagination.has_next_page);
             })
             .catch((error) => {
                 toastRef.current.show("Error loading anime list! " + error.message);
@@ -38,6 +42,23 @@ const Dashboard = () => {
             .finally(() => {
                 setIsLoading(false);
                 isFetchingAnimeList.current = false;
+            });
+    };
+    
+    const fetchSearchedAnimeList = ({ query, genres }) => {
+        setIsLoading(true);
+
+        jikanClient
+            .searchAnime({ page, query, genres })
+            .then((response) => {
+                setAnimeList(response.data);
+                setHasNextPage(response.pagination.has_next_page);
+            })
+            .catch((error) => {
+                toastRef.current.show("Error loading anime list! " + error.message);
+            })
+            .finally(() => {
+                setIsLoading(false);
             });
     };
 
@@ -49,6 +70,10 @@ const Dashboard = () => {
         if (listMode === DEFAULT) {
             isFetchingAnimeList.current = true;
             fetchDefaultAnimeList();
+        } else {
+            const query = searchText.trim();
+            const genres = Array.from(searchGenre).map((id) => id.toString()).join(",");
+            fetchSearchedAnimeList({ query, genres });
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
@@ -73,10 +98,10 @@ const Dashboard = () => {
 
     return (
         <div id="main-body">
-            <Search toastRef={toastRef} setIsLoading={setIsLoading} />
+            <Search {...{ fetchSearchedAnimeList }} />
             <AnimeList animeList={animeList} />
             {isLoading && <Loading />}
-            {!isLoading && animeList.length > 0 && <GenericButton onClick={() => setPage(page + 1)} text={"Load More"} />}
+            {!isLoading && animeList.length > 0 && hasNextPage && <GenericButton onClick={() => setPage(page + 1)} text={"Load More"} />}
             <Toast ref={toastRef} />
         </div>
     );

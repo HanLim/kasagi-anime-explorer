@@ -5,7 +5,7 @@ export const createAnimeSlice = (set) => ({
     listMode: DEFAULT,
     isLoading: false,
     searchText: "",
-    searchGenre: null,
+    searchGenre: new Set(),
 
 
 
@@ -22,7 +22,20 @@ export const createAnimeSlice = (set) => ({
     setListMode: (mode) => set({ listMode: mode }),
     setLoading: (isLoading) => set({ isLoading }),
     setSearchText: (text) => set({ searchText: text }),
-    setSearchGenre: (genre) => set({ searchGenre: genre }),
+    setSearchGenre: (genre) => set((state) => {
+        const newSet = new Set(state.searchGenre);
+
+        if (genre == null) {
+            return { searchGenre: new Set() };
+        } else if (newSet.has(genre)) {
+            newSet.delete(genre);
+        } else {
+            newSet.add(genre);
+        }
+
+        return { searchGenre: newSet };
+    }),
+
 });
 
 

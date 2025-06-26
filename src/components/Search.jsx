@@ -5,42 +5,48 @@ import { BaseStore } from '../store/store';
 import GenericButton from './GenericButton';
 import { DEFAULT, SEARCHED } from '../store/animeSlice';
 
-import jikanClient from '../api/jikanApi';
 
-const Search = ({ toastRef, setIsLoading }) => {
-    const page = BaseStore((state) => state.page);
+const Search = ({ fetchSearchedAnimeList }) => {
     const genre = BaseStore((state) => state.genre);
     const reset = BaseStore((state) => state.reset);
     const listMode = BaseStore((state) => state.listMode);
-    const setAnimeList = BaseStore((state) => state.setList);
-    const setListMode = BaseStore((state) => state.setListMode);
     const searchText = BaseStore((state) => state.searchText);
-    const setSearchText = BaseStore((state) => state.setSearchText);
-
     const searchGenre = BaseStore((state) => state.searchGenre);
 
+    const setAnimeList = BaseStore((state) => state.setList);
+    const setListMode = BaseStore((state) => state.setListMode);
+    const setSearchText = BaseStore((state) => state.setSearchText);
+    const setSearchGenre = BaseStore((state) => state.setSearchGenre);
+    const setPage = BaseStore((state) => state.setPage);
+
+
+
     const [showDropdown, setShowDropdown] = useState(false);
-    const [filters, setFilters] = useState(null);
 
     const dropdownRef = useRef();
 
     const selectfilter = (key) => {
-        setFilters(key);
+        setSearchGenre(key);
     };
 
     const searchAnime = () => {
         const query = searchText.trim();
-        const genres = searchGenre;
+        const genres = Array.from(searchGenre).map((id) => id.toString()).join(",");
         if (!query && !genres) return;
 
+        // reset page to 1 when searching in default mode
+        // TODO: make this work
         setAnimeList([]);
         setListMode(SEARCHED);
+        if (listMode === DEFAULT) {
+            setPage(1);
+        }
         fetchSearchedAnimeList({ query, genres });
     }
 
     const resetSearch = () => {
         setSearchText("");
-        setFilters(null);
+        setSearchGenre(null);
 
         if (listMode === SEARCHED) {
             reset();
@@ -48,33 +54,18 @@ const Search = ({ toastRef, setIsLoading }) => {
         }
     };
 
-    const fetchSearchedAnimeList = ({ query, genres }) => {
-        setIsLoading(true);
-
-        jikanClient
-            .searchAnime({ page, query, genres })
-            .then((response) => {
-                setAnimeList(response.data);
-            })
-            .catch((error) => {
-                toastRef.current.show("Error loading anime list! " + error.message);
-            })
-            .finally(() => {
-                setIsLoading(false);
-            });
-    };
-
-    const genreList = genre.map((item) =>
+    const genreList = genre.map((item) => (
         <label key={item.mal_id} className="flex items-center space-x-2">
             <input
-                type="radio"
+                type="checkbox"
                 name="genre"
-                checked={item.mal_id === filters}
+                value={item.mal_id}
+                checked={searchGenre.has(item.mal_id) || false}
                 onChange={() => selectfilter(item.mal_id)}
             />
             <span>{item.name}</span>
         </label>
-    );
+    ));
 
     useEffect(() => {
         const handleClickOutside = (event) => {
@@ -110,7 +101,7 @@ const Search = ({ toastRef, setIsLoading }) => {
                 <div className="relative" ref={dropdownRef}>
                     <GenericButton onClick={() => setShowDropdown(!showDropdown)} text={"Filter"} />
                     {showDropdown && (
-                        <div className="absolute h-40 overflow-scroll right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-10 p-2 space-y-2">
+                        <div className="custom-scrollbar absolute h-40 overflow-scroll right-0 mt-2 w-48 bg-white border rounded-lg shadow-lg z-10 p-2 space-y-2">
                             {genreList}
                         </div>
                     )}
@@ -122,9 +113,9 @@ const Search = ({ toastRef, setIsLoading }) => {
         </div>
     );
 };
+
 Search.propTypes = {
-    toastRef: PropTypes.shape({ current: PropTypes.any }),
-    setIsLoading: PropTypes.func.isRequired,
+    fetchSearchedAnimeList: PropTypes.func.isRequired
 };
 
 export default Search;
