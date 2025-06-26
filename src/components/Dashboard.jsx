@@ -41,8 +41,6 @@ const Dashboard = () => {
             });
     };
 
-
-
     useEffect(() => {
         // to prevent double fetching in dev
         if (isFetchingAnimeList.current) return;
@@ -78,7 +76,7 @@ const Dashboard = () => {
             <Search toastRef={toastRef} setIsLoading={setIsLoading} />
             <AnimeList animeList={animeList} />
             {isLoading && <Loading />}
-            {!isLoading && <GenericButton onClick={() => setPage(page + 1)} text={"Load More"} />}
+            {!isLoading && animeList.length > 0 && <GenericButton onClick={() => setPage(page + 1)} text={"Load More"} />}
             <Toast ref={toastRef} />
         </div>
     );

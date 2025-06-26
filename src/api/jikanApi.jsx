@@ -8,7 +8,7 @@ class JikanAPI extends BaseAPI {
     // the reason to set it to 12 is because depending on screen size,
     // there will be 1 / 2 / 3 per row
     async getAnimeList({ page = 1, limit = 12 }) {
-        return this.get("/top/anime", { page, limit });
+        return this.get("/anime", { page, limit });
     }
 
     async getAnimeDetails({ id }) {

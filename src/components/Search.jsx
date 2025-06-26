@@ -99,7 +99,9 @@ const Search = ({ toastRef, setIsLoading }) => {
                     onChange={(e) => setSearchText(e.target.value)}
                     className="flex-grow p-2 border rounded-lg focus:ring focus:ring-blue-300"
                 />
-                <GenericButton onClick={searchAnime} text={"Search"} />
+                <div className="relative">
+                    <GenericButton onClick={searchAnime} text={"Search"} />
+                </div>
                 <div className="relative" ref={dropdownRef}>
                     <GenericButton onClick={() => setShowDropdown(!showDropdown)} text={"Filter"} />
                     {showDropdown && (
@@ -110,7 +112,6 @@ const Search = ({ toastRef, setIsLoading }) => {
                 </div>
                 <div className="relative">
                     <GenericButton onClick={resetSearch} text={"Reset"} />
-
                 </div>
             </div>
         </div>
