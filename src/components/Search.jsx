@@ -97,6 +97,11 @@ const Search = ({ toastRef, setIsLoading }) => {
                     placeholder="Search..."
                     value={searchText}
                     onChange={(e) => setSearchText(e.target.value)}
+                    onKeyDown={(e) => {
+                        if (e.key === "Enter") {
+                            searchAnime();
+                        }
+                    }}
                     className="flex-grow p-2 border rounded-lg focus:ring focus:ring-blue-300"
                 />
                 <div className="relative">
