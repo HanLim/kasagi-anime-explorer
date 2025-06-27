@@ -28,7 +28,7 @@ const Dashboard = () => {
     const [isLoading, setIsLoading] = useState(false);
     const [hasNextPage, setHasNextPage] = useState(true);
 
-    const fetchDefaultAnimeList = () => {
+    const fetchDefaultAnimeList = ({ page }) => {
         setIsLoading(true);
         jikanClient
             .getAnimeList({ page })
@@ -44,8 +44,8 @@ const Dashboard = () => {
                 isFetchingAnimeList.current = false;
             });
     };
-    
-    const fetchSearchedAnimeList = ({ query, genres }) => {
+
+    const fetchSearchedAnimeList = ({ page, query, genres }) => {
         setIsLoading(true);
 
         jikanClient
@@ -62,6 +62,12 @@ const Dashboard = () => {
             });
     };
 
+    const loadMore = () => {
+        let queryPage = page + 1;
+        setPage(queryPage);
+        fetchSearchedAnimeList({ page: queryPage })
+    }
+
     useEffect(() => {
         // to prevent double fetching in dev
         if (isFetchingAnimeList.current) return;
@@ -69,15 +75,15 @@ const Dashboard = () => {
         // fetch list in default mode
         if (listMode === DEFAULT) {
             isFetchingAnimeList.current = true;
-            fetchDefaultAnimeList();
+            fetchDefaultAnimeList({ page: 1 });
         } else {
             const query = searchText.trim();
             const genres = Array.from(searchGenre).map((id) => id.toString()).join(",");
-            fetchSearchedAnimeList({ query, genres });
+            fetchSearchedAnimeList({ page, query, genres });
         }
 
         // eslint-disable-next-line react-hooks/exhaustive-deps
-    }, [page, listMode]);
+    }, []);
 
     useEffect(() => {
         const fetchGenres = async () => {
@@ -98,10 +104,10 @@ const Dashboard = () => {
 
     return (
         <div id="main-body">
-            <Search {...{ fetchSearchedAnimeList }} />
+            <Search {...{ fetchSearchedAnimeList, fetchDefaultAnimeList }} />
             <AnimeList animeList={animeList} />
             {isLoading && <Loading />}
-            {!isLoading && animeList.length > 0 && hasNextPage && <GenericButton onClick={() => setPage(page + 1)} text={"Load More"} />}
+            {!isLoading && animeList.length > 0 && hasNextPage && <GenericButton onClick={loadMore} text={"Load More"} />}
             <Toast ref={toastRef} />
         </div>
     );

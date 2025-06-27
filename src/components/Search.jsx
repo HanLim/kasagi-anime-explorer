@@ -6,7 +6,8 @@ import GenericButton from './GenericButton';
 import { DEFAULT, SEARCHED } from '../store/animeSlice';
 
 
-const Search = ({ fetchSearchedAnimeList }) => {
+const Search = ({ fetchSearchedAnimeList, fetchDefaultAnimeList }) => {
+    const page = BaseStore((state) => state.page);
     const genre = BaseStore((state) => state.genre);
     const reset = BaseStore((state) => state.reset);
     const listMode = BaseStore((state) => state.listMode);
@@ -18,8 +19,6 @@ const Search = ({ fetchSearchedAnimeList }) => {
     const setSearchText = BaseStore((state) => state.setSearchText);
     const setSearchGenre = BaseStore((state) => state.setSearchGenre);
     const setPage = BaseStore((state) => state.setPage);
-
-
 
     const [showDropdown, setShowDropdown] = useState(false);
 
@@ -34,14 +33,16 @@ const Search = ({ fetchSearchedAnimeList }) => {
         const genres = Array.from(searchGenre).map((id) => id.toString()).join(",");
         if (!query && !genres) return;
 
-        // reset page to 1 when searching in default mode
-        // TODO: make this work
         setAnimeList([]);
         setListMode(SEARCHED);
+
+        let searchPage = page;
+
         if (listMode === DEFAULT) {
             setPage(1);
+            searchPage = 1;
         }
-        fetchSearchedAnimeList({ query, genres });
+        fetchSearchedAnimeList({ page: searchPage, query, genres });
     }
 
     const resetSearch = () => {
@@ -51,6 +52,7 @@ const Search = ({ fetchSearchedAnimeList }) => {
         if (listMode === SEARCHED) {
             reset();
             setListMode(DEFAULT);
+            fetchDefaultAnimeList({ page: 1 });
         }
     };
 
