@@ -27,15 +27,15 @@ export const createAnimeSlice = (set) => ({
 
         if (genre == null) {
             return { searchGenre: new Set() };
-        } else if (newSet.has(genre)) {
+        }
+
+        if (newSet.has(genre)) {
             newSet.delete(genre);
         } else {
             newSet.add(genre);
         }
-
         return { searchGenre: newSet };
     }),
-
 });
 
 
