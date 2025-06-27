@@ -9,6 +9,7 @@ import { BaseStore } from '../store/store';
 import GenericButton from './GenericButton';
 import Search from './Search';
 import { DEFAULT } from '../store/animeSlice';
+import NotFound from './404';
 
 
 const Dashboard = () => {
@@ -105,7 +106,8 @@ const Dashboard = () => {
     return (
         <div id="main-body">
             <Search {...{ fetchSearchedAnimeList, fetchDefaultAnimeList }} />
-            <AnimeList animeList={animeList} />
+            {animeList.length > 0 && <AnimeList animeList={animeList} />}
+            {animeList.length === 0 && <NotFound/>}
             {isLoading && <Loading />}
             {!isLoading && animeList.length > 0 && hasNextPage && <GenericButton onClick={loadMore} text={"Load More"} />}
             <Toast ref={toastRef} />

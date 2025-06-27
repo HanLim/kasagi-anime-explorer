@@ -83,7 +83,7 @@ const Search = ({ fetchSearchedAnimeList, fetchDefaultAnimeList }) => {
     }, []);
 
     return (
-        <div className="w-full">
+        <div className="w-full p-8">
             <div className="flex items-center space-x-4 p-4 border rounded-xl shadow-md bg-white w-full">
                 <input
                     type="text"
