@@ -117,7 +117,8 @@ const Search = ({ fetchSearchedAnimeList, fetchDefaultAnimeList }) => {
 };
 
 Search.propTypes = {
-    fetchSearchedAnimeList: PropTypes.func.isRequired
+    fetchSearchedAnimeList: PropTypes.func.isRequired,
+    fetchDefaultAnimeList: PropTypes.func.isRequired,
 };
 
 export default Search;
