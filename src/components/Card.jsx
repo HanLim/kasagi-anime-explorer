@@ -30,7 +30,7 @@ const generateGenre = (genres) => {
         return (
             <span
                 key={item.mal_id}
-                className="m-1 inline-flex items-center gap-x-1.5 py-1.5 px-3 rounded-full text-xs font-medium bg-gray-300 text-gray-500"
+                className="bg-blue-100 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded m-1"
             >
                 {item.name}
             </span>
@@ -55,7 +55,6 @@ const Card = ({ anime }) => {
     const url = "/anime/" + anime.mal_id;
 
     const favourited = BaseStore((state) => state.favourited);
-    console.log("Favourited:", favourited);
     const setFavourited = BaseStore((state) => state.setFavourited);
 
     const isFavourited = favourited.has(anime.mal_id.toString());
