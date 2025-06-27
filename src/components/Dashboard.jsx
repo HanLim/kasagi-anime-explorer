@@ -104,7 +104,7 @@ const Dashboard = () => {
     }, []);
 
     return (
-        <div id="main-body">
+        <div id="main-body" className="bg-gray-50">
             <Search {...{ fetchSearchedAnimeList, fetchDefaultAnimeList }} />
             {animeList.length > 0 && <AnimeList animeList={animeList} />}
             {!isLoading && animeList.length === 0 && 

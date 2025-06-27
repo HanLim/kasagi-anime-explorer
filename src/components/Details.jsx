@@ -14,7 +14,7 @@ const DetailsBody = (anime) => {
                 className="w-64 h-96 object-cover rounded-lg shadow-lg mb-6 md:mb-0 md:mr-10 border"
             />
             <div className="max-w-xl w-full bg-white rounded-lg shadow-lg p-8">
-                <h1 className="text-3xl font-bold mb-2">{anime.title_english || anime.title}</h1>
+                <h1 className="text-3xl font-bold mb-2 text-gray-700">{anime.title_english || anime.title}</h1>
                 <p className="text-gray-500 mb-2 italic">{anime.title_japanese}</p>
                 <div className="flex flex-wrap gap-2 mb-4">
                     {anime.genres?.map((g) => (

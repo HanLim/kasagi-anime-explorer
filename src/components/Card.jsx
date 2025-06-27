@@ -70,7 +70,7 @@ const Card = ({ anime }) => {
             <div className="flex flex-col w-full items-center text-center justify-evenly p-4 leading-normal md:h-full">
                 <div className="flex items-center gap-2 mb-2">
                     <p
-                        className="text-xl font-bold tracking-tight text-gray-500 hover:text-gray-600 cursor-pointer"
+                        className="text-xl font-bold tracking-tight text-gray-700 hover:text-gray-600 cursor-pointer"
                         onClick={() => window.location.href = url}
                     >
                         {anime.title}
