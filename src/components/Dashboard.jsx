@@ -107,7 +107,9 @@ const Dashboard = () => {
         <div id="main-body">
             <Search {...{ fetchSearchedAnimeList, fetchDefaultAnimeList }} />
             {animeList.length > 0 && <AnimeList animeList={animeList} />}
-            {!isLoading && animeList.length === 0 && <NotFound/>}
+            {!isLoading && animeList.length === 0 && 
+                <NotFound text={"Something went wrong."} show404={false} />
+            }
             {isLoading && <Loading />}
             {!isLoading && animeList.length > 0 && hasNextPage && <GenericButton onClick={loadMore} text={"Load More"} />}
             <Toast ref={toastRef} />
