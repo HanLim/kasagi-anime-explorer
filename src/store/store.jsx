@@ -26,7 +26,6 @@ export const BaseStore = create(
                         if (data.state?.favourited) {
                             data.state.favourited = new Map(Object.entries(data.state.favourited));
                         }
-                        console.log(data);
                         return data;
                     } catch (e) {
                         console.error("Failed to parse persisted state:", e);
