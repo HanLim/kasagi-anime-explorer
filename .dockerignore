@@ -1,0 +1,7 @@
+node_modules
+build
+dist
+.vite
+.cache
+.env
+.env.*.local
