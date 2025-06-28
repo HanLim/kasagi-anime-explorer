@@ -1,8 +1,10 @@
 import PropTypes from "prop-types";
-import { GoodScoreIcon, BadScoreIcon, NormalScoreIcon } from "./Icon";
-import { HeartIcon as HeartSolid } from "@heroicons/react/24/solid";
-import { HeartIcon as HeartOutline } from "@heroicons/react/24/outline";
 import { BaseStore } from "../store/store";
+import {
+    generateRatingIcon,
+    generateGenre,
+    generateHeartIcon,
+} from './utils';
 
 const cardClass = `
     flex flex-col md:flex-row
@@ -14,43 +16,6 @@ const cardClass = `
     transition duration-300
     md:max-w-xl`;
 
-
-const generateIcon = (score) => {
-    if (score >= 7) {
-        return <GoodScoreIcon />;
-    } else if (score >= 5) {
-        return <NormalScoreIcon />;
-    } else {
-        return <BadScoreIcon />;
-    }
-};
-
-const generateGenre = (genres) => {
-    return genres.slice(0, 3).map((item) => {
-        return (
-            <span
-                key={item.mal_id}
-                className="bg-blue-100 text-gray-800 text-xs font-semibold px-2.5 py-0.5 rounded m-1"
-            >
-                {item.name}
-            </span>
-        );
-    });
-};
-
-
-const generateHeartIcon = (isFavourited, setFavourited, anime) => {
-    const HeartIcon = isFavourited ? HeartSolid : HeartOutline;
-    const color = isFavourited ? "text-red-500" : "text-gray-400";
-    const classes = `cursor-pointer h-6 w-6 ${color}`;
-    
-    return <HeartIcon 
-        className={classes} 
-        onClick={() => setFavourited(anime)}
-    />;
-}
-
-
 const Card = ({ anime }) => {
     const url = "/anime/" + anime.mal_id;
 
@@ -58,7 +23,6 @@ const Card = ({ anime }) => {
     const setFavourited = BaseStore((state) => state.setFavourited);
 
     const isFavourited = favourited.has(anime.mal_id.toString());
-    console.log("Is Favourited:", isFavourited);
 
     return (
         <div className={cardClass}>
@@ -80,7 +44,7 @@ const Card = ({ anime }) => {
                 <hr className="w-full border-gray-500" />
                 <div className="mb-3 font-normal text-gray-700 dark:text-gray-400 flex items-center gap-2">
                     <span>{anime.score}</span>
-                    <div className="w-5 h-5">{generateIcon(anime.score)}</div>
+                    <div className="w-5 h-5">{generateRatingIcon(anime.score)}</div>
                 </div>
                 <p>{generateGenre(anime.genres)}</p>
             </div>
