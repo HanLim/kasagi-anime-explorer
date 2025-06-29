@@ -78,3 +78,13 @@ npm test
 - For this MVP, Zustand and useState are used for simplicity and speed. This limits scalability and advanced features.
 - No backend means all user actions are stored only in session storage; a backend would be needed for a full-featured app.
 - Relying on an external API means the app is unusable if the API is down or rate-limited.
+
+---
+
+## Screenshots
+
+### Homepage
+![Homepage](screenshots/homepage.png)
+
+### Details Page
+![Details Page](screenshots/details.png)
